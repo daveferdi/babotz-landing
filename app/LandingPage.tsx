@@ -397,7 +397,7 @@ export default function LandingPage() {
               }} />
               {/* Brand mark on layers */}
               <div style={{ position: "absolute", top: 24, right: 24 }}>
-                <BrandLogo size="sm" color={`${clr.paperLight}c0`} light />
+                <BrandLogo size="sm" />
               </div>
             </div>
           </motion.div>
@@ -672,7 +672,7 @@ export default function LandingPage() {
       }}>
         <Wrap style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
-            <BrandLogo size="sm" color={`${clr.creamSand}90`} light />
+            <BrandLogo size="sm" />
             <span style={{ fontSize: 10.5, color: `${clr.creamSand}45`, display: "block", marginTop: 6, letterSpacing: "0.02em" }}>
               © {new Date().getFullYear()} {C.ownerName}
             </span>
