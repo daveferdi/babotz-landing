@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>בַּבּוֹץ</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0f0c09; overflow: hidden; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('c');
+  const dpr = Math.min(window.devicePixelRatio, 2);
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  const gl = canvas.getContext('webgl', { alpha: false, antialias: true });
+  gl.viewport(0, 0, canvas.width, canvas.height);
+
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.uniform2f(uRes, canvas.width, canvas.height);
+  });
+
+  const vs = `
+    attribute vec2 pos;
+    varying vec2 uv;
+    void main() {
+      uv = pos * 0.5 + 0.5;
+      gl_Position = vec4(pos, 0.0, 1.0);
+    }
+  `;
+
+  const fs = `
+    precision highp float;
+    varying vec2 uv;
+    uniform float time;
+    uniform vec2 resolution;
+
+    // --- Noise ---
+    vec3 mod289(vec3 x) { return x - floor(x*(1.0/289.0))*289.0; }
+    vec2 mod289(vec2 x) { return x - floor(x*(1.0/289.0))*289.0; }
+    vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+
+    float snoise(vec2 v) {
+      const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+                         -0.577350269189626, 0.024390243902439);
+      vec2 i = floor(v + dot(v, C.yy));
+      vec2 x0 = v - i + dot(i, C.xx);
+      vec2 i1 = (x0.x > x0.y) ? vec2(1,0) : vec2(0,1);
+      vec4 x12 = x0.xyxy + C.xxzz; x12.xy -= i1;
+      i = mod289(i);
+      vec3 p = permute(permute(i.y+vec3(0,i1.y,1))+i.x+vec3(0,i1.x,1));
+      vec3 m = max(0.5-vec3(dot(x0,x0),dot(x12.xy,x12.xy),dot(x12.zw,x12.zw)),0.0);
+      m=m*m; m=m*m;
+      vec3 x = 2.0*fract(p*C.www)-1.0;
+      vec3 h = abs(x)-0.5;
+      vec3 ox = floor(x+0.5);
+      vec3 a0 = x-ox;
+      m *= 1.79284291400159-0.85373472095314*(a0*a0+h*h);
+      vec3 g;
+      g.x = a0.x*x0.x+h.x*x0.y;
+      g.yz = a0.yz*x12.xz+h.yz*x12.yw;
+      return 130.0*dot(m,g);
+    }
+
+    float fbm(vec2 p) {
+      float v = 0.0, a = 0.5;
+      mat2 r = mat2(0.87,0.48,-0.48,0.87);
+      for(int i=0; i<5; i++) {
+        v += a*snoise(p);
+        p = r*p*2.1 + 83.0;
+        a *= 0.48;
+      }
+      return v;
+    }
+
+    void main() {
+      // Aspect-correct coordinates
+      float aspect = resolution.x / resolution.y;
+      vec2 p = uv;
+      p.x *= aspect;
+
+      float t = time * 0.018; // very slow
+
+      // Two layers of domain-warped fbm — creates organic, alive surface
+      float warp1 = fbm(p * 1.2 + vec2(t, t * 0.7));
+      float warp2 = fbm(p * 1.5 + vec2(-t * 0.6, t * 0.4) + warp1 * 0.6);
+      float surface = fbm(p * 0.8 + warp2 * 0.5 + vec2(t * 0.3, -t * 0.2));
+
+      // Final blended value
+      float v = warp1 * 0.25 + warp2 * 0.35 + surface * 0.4;
+      v = v * 0.5 + 0.5; // normalize to 0..1
+
+      // --- Earth palette — warm, quiet, deep ---
+      vec3 deep    = vec3(0.14, 0.09, 0.05);  // almost black earth
+      vec3 mud     = vec3(0.25, 0.16, 0.09);
+      vec3 soil    = vec3(0.38, 0.24, 0.14);
+      vec3 terra   = vec3(0.55, 0.35, 0.21);
+      vec3 clay    = vec3(0.68, 0.48, 0.30);
+      vec3 sand    = vec3(0.80, 0.65, 0.48);
+      vec3 cream   = vec3(0.90, 0.84, 0.76);
+
+      // Smooth gradient through palette
+      vec3 col;
+      if      (v < 0.15) col = mix(deep, mud,   v / 0.15);
+      else if (v < 0.30) col = mix(mud, soil,    (v-0.15)/0.15);
+      else if (v < 0.45) col = mix(soil, terra,  (v-0.30)/0.15);
+      else if (v < 0.58) col = mix(terra, clay,  (v-0.45)/0.13);
+      else if (v < 0.72) col = mix(clay, sand,   (v-0.58)/0.14);
+      else               col = mix(sand, cream,  (v-0.72)/0.28);
+
+      // --- Subtle surface lighting ---
+      float eps = 0.004;
+      float h0 = fbm(p*0.8 + warp2*0.5 + vec2(t*0.3,-t*0.2));
+      float hx = fbm((p+vec2(eps,0))*0.8 + warp2*0.5 + vec2(t*0.3,-t*0.2));
+      float hy = fbm((p+vec2(0,eps))*0.8 + warp2*0.5 + vec2(t*0.3,-t*0.2));
+      vec3 normal = normalize(vec3(-(hx-h0)/eps*0.15, -(hy-h0)/eps*0.15, 1.0));
+      vec3 lightDir = normalize(vec3(0.3, 0.5, 1.0));
+      float diff = max(dot(normal, lightDir), 0.0);
+      float spec = pow(max(dot(reflect(-lightDir, normal), vec3(0,0,1)), 0.0), 32.0);
+
+      col *= 0.65 + diff * 0.4;
+      col += spec * 0.03 * vec3(1.0, 0.92, 0.8);
+
+      // --- Fine grain ---
+      float grain = snoise(uv * 90.0 + time * 0.003) * 0.025;
+      col += grain;
+
+      // --- Gentle vignette ---
+      float vig = 1.0 - pow(length((uv - 0.5) * 1.4), 2.0) * 0.45;
+      col *= vig;
+
+      // Ensure minimum warmth — never go truly black
+      col = max(col, vec3(0.04, 0.025, 0.015));
+
+      gl_FragColor = vec4(col, 1.0);
+    }
+  `;
+
+  function makeShader(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+    return s;
+  }
+
+  const prog = gl.createProgram();
+  gl.attachShader(prog, makeShader(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, makeShader(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(prog, 'pos');
+  gl.enableVertexAttribArray(loc);
+  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+  const uTime = gl.getUniformLocation(prog, 'time');
+  const uRes = gl.getUniformLocation(prog, 'resolution');
+  gl.uniform2f(uRes, canvas.width, canvas.height);
+
+  let t = 0;
+  function draw() {
+    t += 0.016;
+    gl.uniform1f(uTime, t);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
