@@ -594,10 +594,41 @@ export default function LandingPage() {
       {/* ════════ RESPONSIVE ════════ */}
       <style jsx global>{`
         @media (max-width: 800px) {
+          /* Grids to single column */
           section > div > div[style*="grid-template-columns"] {
             grid-template-columns: 1fr !important;
+            gap: 16px !important;
           }
-          section { padding: 64px 0 !important; }
+          /* Reduce section padding */
+          section { padding: 56px 0 !important; }
+          /* Hero text */
+          h1 { font-size: 2.2rem !important; }
+          /* Tighter wrap padding */
+          section > div[style*="max-width"] {
+            padding-left: 20px !important;
+            padding-right: 20px !important;
+          }
+          /* Parallax images — shorter on mobile */
+          div[style*="overflow: hidden"][style*="height"] {
+            height: 40vh !important;
+          }
+          /* Form full width */
+          form { padding: 28px 20px !important; }
+          /* Values 3-col to 1-col */
+          div[style*="repeat(3"] {
+            grid-template-columns: 1fr !important;
+            gap: 32px !important;
+          }
+          /* Header tighter */
+          header { padding: 0 20px !important; }
+        }
+
+        @media (max-width: 480px) {
+          h1 { font-size: 1.8rem !important; }
+          section { padding: 40px 0 !important; }
+          div[style*="overflow: hidden"][style*="height"] {
+            height: 30vh !important;
+          }
         }
       `}</style>
     </div>
