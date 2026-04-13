@@ -181,20 +181,23 @@ export default function LandingPage() {
         height: "100vh", position: "relative", overflow: "hidden",
         display: "flex", alignItems: "center", justifyContent: "center",
       }}>
-        {/* Background image — desert mud structure at sunset */}
+        {/* Background — video with image fallback */}
+        <video
+          autoPlay muted loop playsInline
+          poster="/images/hero.png"
+          style={{
+            position: "absolute", inset: 0, width: "100%", height: "100%",
+            objectFit: "cover", filter: "brightness(0.65)",
+          }}
+        >
+          <source src="/images/shortanimation.mp4" type="video/mp4" />
+        </video>
+        {/* Fallback gradient */}
         <div style={{
           position: "absolute", inset: 0,
-          backgroundImage: "url('/images/hero.png')",
-          backgroundSize: "cover", backgroundPosition: "center",
-          filter: "brightness(0.7)",
-        }}>
-          {/* Fallback gradient if no image */}
-          <div style={{
-            position: "absolute", inset: 0,
-            background: `linear-gradient(160deg, ${clr.darkMud} 0%, ${clr.deepSoil} 40%, ${clr.terracottaDust} 70%, ${clr.warmEarth} 100%)`,
-            zIndex: -1,
-          }} />
-        </div>
+          background: `linear-gradient(160deg, ${clr.darkMud} 0%, ${clr.deepSoil} 40%, ${clr.terracottaDust} 70%, ${clr.warmEarth} 100%)`,
+          zIndex: -1,
+        }} />
         {/* Overlay */}
         <div style={{
           position: "absolute", inset: 0,
@@ -316,6 +319,18 @@ export default function LandingPage() {
 
       {/* ════════ PHOTO — Full width parallax ════════ */}
       <ParallaxImage src="/images/hands.png" alt="ידיים בבוץ" height="65vh" />
+
+      {/* ════════ KIT PHOTO — what's in the box ════════ */}
+      <section style={{ padding: "100px 0", background: clr.surface }}>
+        <Wrap max={900}>
+          <Reveal>
+            <div style={{ borderRadius: 16, overflow: "hidden", boxShadow: `0 20px 60px ${clr.darkMud}10` }}>
+              <img src="/images/whatinthebox.png" alt="תכולת ערכת בוץ"
+                style={{ width: "100%", display: "block" }} />
+            </div>
+          </Reveal>
+        </Wrap>
+      </section>
 
       {/* ════════ SERVICES ════════ */}
       <section id="services" style={{ padding: "100px 0", background: clr.bg }}>
