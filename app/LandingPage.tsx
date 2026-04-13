@@ -184,7 +184,7 @@ export default function LandingPage() {
         {/* Background image — desert mud structure at sunset */}
         <div style={{
           position: "absolute", inset: 0,
-          backgroundImage: "url('/images/hero.jpg')",
+          backgroundImage: "url('/images/hero.png')",
           backgroundSize: "cover", backgroundPosition: "center",
           filter: "brightness(0.7)",
         }}>
@@ -315,7 +315,7 @@ export default function LandingPage() {
       </section>
 
       {/* ════════ PHOTO — Full width parallax ════════ */}
-      <ParallaxImage src="/images/hands.jpg" alt="ידיים בבוץ" height="65vh" />
+      <ParallaxImage src="/images/hands.png" alt="ידיים בבוץ" height="65vh" />
 
       {/* ════════ SERVICES ════════ */}
       <section id="services" style={{ padding: "100px 0", background: clr.bg }}>
@@ -364,7 +364,7 @@ export default function LandingPage() {
       </section>
 
       {/* ════════ PHOTO — Avraham with child ════════ */}
-      <ParallaxImage src="/images/avraham.jpg" alt="אברהם עם ילד בסדנת בוץ" height="75vh" />
+      <ParallaxImage src="/images/avraham.png" alt="אברהם עם ילד בסדנת בוץ" height="75vh" />
 
       {/* ════════ VALUES ════════ */}
       <section style={{ padding: "100px 0", background: clr.surface }}>
@@ -394,7 +394,7 @@ export default function LandingPage() {
       </section>
 
       {/* ════════ PHOTO — Desert landscape ════════ */}
-      <ParallaxImage src="/images/desert.jpg" alt="מבנה בוץ במדבר" height="60vh" />
+      <ParallaxImage src="/images/desert.png" alt="מבנה בוץ במדבר" height="60vh" />
 
       {/* ════════ TESTIMONIALS ════════ */}
       <section style={{ padding: "100px 0", background: clr.bg }}>
@@ -441,7 +441,7 @@ export default function LandingPage() {
       </section>
 
       {/* ════════ PHOTO — Hands meeting in mud bowl ════════ */}
-      <ParallaxImage src="/images/together.jpg" alt="ידיים נפגשות בבוץ" height="55vh" />
+      <ParallaxImage src="/images/together.png" alt="ידיים נפגשות בבוץ" height="55vh" />
 
       {/* ════════ CONTACT ════════ */}
       <section id="contact" style={{ padding: "100px 0", background: clr.surface }}>
