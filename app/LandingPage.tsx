@@ -126,7 +126,7 @@ export default function LandingPage() {
 
   const inputStyle: React.CSSProperties = {
     width: "100%", padding: "14px 16px", borderRadius: 8,
-    border: `1px solid ${clr.border}`, background: clr.bg,
+    border: `1px solid ${clr.border}`, background: "rgba(244,240,235,0.8)",
     fontSize: 14, fontFamily: "inherit", outline: "none", boxSizing: "border-box",
     transition: "border-color 0.3s", color: clr.textPrimary,
   }
@@ -134,7 +134,10 @@ export default function LandingPage() {
   return (
     <div dir="rtl" style={{
       fontFamily: "'Heebo', system-ui, sans-serif",
-      color: clr.textPrimary, background: clr.bg, overflowX: "hidden",
+      color: clr.textPrimary,
+      background: `#F4F0EB url('/images/bg-tile.png') repeat`,
+      backgroundSize: "512px 512px",
+      overflowX: "hidden",
     }}>
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Frank+Ruhl+Libre:wght@300;400;500;700&display=swap');
@@ -284,7 +287,7 @@ export default function LandingPage() {
       </section>
 
       {/* ════════ INTRO STRIP ════════ */}
-      <section style={{ padding: "100px 0", background: clr.surface }}>
+      <section style={{ padding: "100px 0", background: "rgba(253,251,248,0.85)" }}>
         <Wrap max={720}>
           <Reveal>
             <div style={{ textAlign: "center" }}>
@@ -321,7 +324,7 @@ export default function LandingPage() {
       <ParallaxImage src="/images/hands.png" alt="ידיים בבוץ" height="65vh" />
 
       {/* ════════ KIT PHOTO — what's in the box ════════ */}
-      <section style={{ padding: "100px 0", background: clr.surface }}>
+      <section style={{ padding: "100px 0", background: "rgba(253,251,248,0.85)" }}>
         <Wrap max={900}>
           <Reveal>
             <div style={{ borderRadius: 16, overflow: "hidden", boxShadow: `0 20px 60px ${clr.darkMud}10` }}>
@@ -333,7 +336,7 @@ export default function LandingPage() {
       </section>
 
       {/* ════════ SERVICES ════════ */}
-      <section id="services" style={{ padding: "100px 0", background: clr.bg }}>
+      <section id="services" style={{ padding: "100px 0", background: "rgba(244,240,235,0.8)" }}>
         <Wrap>
           <Reveal>
             <p style={{
@@ -355,7 +358,7 @@ export default function LandingPage() {
               <Reveal key={i} delay={i * 0.1}>
                 <div style={{
                   padding: "40px 36px", borderRadius: 12,
-                  background: clr.surface, border: `1px solid ${clr.border}`,
+                  background: "rgba(253,251,248,0.85)", border: `1px solid ${clr.border}`,
                   transition: "border-color 0.3s",
                   minHeight: 180,
                 }}
@@ -382,7 +385,7 @@ export default function LandingPage() {
       <ParallaxImage src="/images/avraham.png" alt="אברהם עם ילד בסדנת בוץ" height="75vh" />
 
       {/* ════════ VALUES ════════ */}
-      <section style={{ padding: "100px 0", background: clr.surface }}>
+      <section style={{ padding: "100px 0", background: "rgba(253,251,248,0.85)" }}>
         <Wrap>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 60 }}>
             {[
@@ -412,7 +415,7 @@ export default function LandingPage() {
       <ParallaxImage src="/images/desert.png" alt="מבנה בוץ במדבר" height="60vh" />
 
       {/* ════════ TESTIMONIALS ════════ */}
-      <section style={{ padding: "100px 0", background: clr.bg }}>
+      <section style={{ padding: "100px 0", background: "rgba(244,240,235,0.8)" }}>
         <Wrap>
           <Reveal>
             <p style={{
@@ -432,7 +435,7 @@ export default function LandingPage() {
               <Reveal key={i} delay={i * 0.1}>
                 <div style={{
                   padding: "36px 30px", borderRadius: 12,
-                  background: clr.surface, border: `1px solid ${clr.border}`,
+                  background: "rgba(253,251,248,0.85)", border: `1px solid ${clr.border}`,
                 }}>
                   <div style={{
                     fontFamily: "'Frank Ruhl Libre', serif",
@@ -459,7 +462,7 @@ export default function LandingPage() {
       <ParallaxImage src="/images/together.png" alt="ידיים נפגשות בבוץ" height="55vh" />
 
       {/* ════════ CONTACT ════════ */}
-      <section id="contact" style={{ padding: "100px 0", background: clr.surface }}>
+      <section id="contact" style={{ padding: "100px 0", background: "rgba(253,251,248,0.85)" }}>
         <Wrap>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "start" }}>
             <Reveal>
@@ -497,7 +500,7 @@ export default function LandingPage() {
               {sent ? (
                 <div style={{
                   padding: "60px 40px", textAlign: "center", borderRadius: 12,
-                  background: clr.bg, border: `1px solid ${clr.border}`,
+                  background: "rgba(244,240,235,0.8)", border: `1px solid ${clr.border}`,
                 }}>
                   <div style={{
                     width: 40, height: 2, background: clr.warmEarth, opacity: 0.4,
@@ -509,7 +512,7 @@ export default function LandingPage() {
               ) : (
                 <form onSubmit={handleSubmit} style={{
                   padding: "40px 36px", borderRadius: 12,
-                  background: clr.bg, border: `1px solid ${clr.border}`,
+                  background: "rgba(244,240,235,0.8)", border: `1px solid ${clr.border}`,
                   display: "flex", flexDirection: "column", gap: 20,
                 }}>
                   <div>
